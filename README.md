@@ -1,33 +1,51 @@
-# Sample nodejs library
+# Simple AWS Config
 
-This is an example of a library to be used as part of any node js application.
+A library to define environment-specific settings for AWS CDK using cdk.json
 
-## How it works
+## Install
 
-Anything placed in the src folder is exported as part of the library.
+`yarn add --dev aws-cdk-config`
 
-The library has built-in support for:
+## Usage
 
-- Typescript
-- Formatting with Prettier
-- Yarn as package manager (with the binary in repo)
+### cdk.json format:
 
-### Useful commands
+```
+{
+    [...]
+    context: {
+        "updateFrequencyMinutes": {
+            "dev": 15,
+            "prod": 5
+        },
+        "dnsEntries": {
+            "dev": {
+                "baseName": "domain.dev",
+            },
+            "prod": {
+                "baseName": "domain.com",
+            }
+        },
+        "projectName": "myProject"
+        [...]
+    }
+}
+```
 
-- `yarn build` to create a production-ready version of the library.
+### Setting up the config in your app entrypoint:
 
-## Publishing
+```
+import { Config } from "aws-cdk-config";
+import { App } from "aws-cdk-lib";
 
-For private packages, we deploy them to Github packages.
+const app = new App();
+const config = new Config(app);
+```
 
-For public packages, we deploy them to both Github packages and npmjs.com.
+### Retrieving values from config:
 
-After updating the version number in package json (i.e. `yarn version patch`), run one of the following commands:
-
-- `yarn pub` deploys to all configured package repositories
-- `yarn pubNpm` deploys to npmjs.com
-- `yarn pubGithub` deploys to Github packages
-
-### Warnings
-
-Never commit any passwords or auth tokens to the repo!
+```
+config.getEnvParam("updateFrequencyMinutes"); //Will vary based on being dev, prod, etc.
+config.getEnvParam("dnsEntries").baseName; //Will vary based on being dev, prod, etc.
+config.getParam("projectName");    //Will be the same across all environments
+```
