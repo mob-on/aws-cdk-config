@@ -1,7 +1,7 @@
 {
   "name": "aws-cdk-config",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A simple library to manage environment-specific AWS CDK config",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -38,6 +38,10 @@
     "rollup-plugin-peer-deps-external": "^2.2.3",
     "rollup-plugin-typescript2": "^0.34.1",
     "typescript": "^4.9.3"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.60.0",
+    "constructs": "^10.1.218"
   },
   "packageManager": "yarn@3.3.0"
 }
